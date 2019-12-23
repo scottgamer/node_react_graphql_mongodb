@@ -22,7 +22,8 @@
     "express": "^4.17.1",
     "express-graphql": "^0.9.0",
     "graphql": "^14.5.8",
-    "mongoose": "^5.8.1"
+    "mongoose": "^5.8.1",
+    "npm": "^6.13.4"
   },
   "devDependencies": {
     "bcryptjs": "^2.4.3",
