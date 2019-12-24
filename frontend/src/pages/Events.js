@@ -143,7 +143,7 @@ const Events = () => {
       {createEvent && <Backdrop />}
       {createEvent && (
         <Modal
-          title="Add Event"
+          title="Add Employee"
           canCancel
           canConfirm
           onCancel={modalCancelHandler}
@@ -151,29 +151,33 @@ const Events = () => {
         >
           <form>
             <div className="form-control">
-              <label htmlFor="title">Title</label>
+              <label htmlFor="title">First name</label>
               <input type="text" id="title" ref={titleEl} />
             </div>
             <div className="form-control">
-              <label htmlFor="price">Price</label>
-              <input type="number" id="price" ref={priceEl} />
+              <label htmlFor="title">Last name</label>
+              <input type="text" id="title" ref={titleEl} />
+            </div>
+            <div className="form-control">
+              <label htmlFor="title">Address</label>
+              <input type="text" id="title" ref={titleEl} />
+            </div>
+            <div className="form-control">
+              <label htmlFor="title">Skills</label>
+              <input type="text" id="title" ref={titleEl} />
             </div>
             <div className="form-control">
               <label htmlFor="date">Date</label>
               <input type="datetime-local" id="date" ref={dateEl} />
-            </div>
-            <div className="form-control">
-              <label htmlFor="description">Description</label>
-              <textarea id="description" rows="4" ref={descriptionEl}></textarea>
             </div>
           </form>
         </Modal>
       )}
       {context.token && (
         <div className="events-control">
-          <p>Show your own Events!</p>
+          <p>List of Employees</p>
           <button className="btn" onClick={startCreateEventHandler}>
-            Create Event
+            Create Employee
           </button>
         </div>
       )}
