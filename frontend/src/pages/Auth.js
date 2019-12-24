@@ -1,5 +1,6 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import "./Auth.css";
+import AuthContext from "../context/auth-context";
 
 import axios from "axios";
 
@@ -8,6 +9,8 @@ const Auth = () => {
 
   const emailEl = useRef(null);
   const passwordEl = useRef(null);
+
+  const contextType = useContext(AuthContext);
 
   const switchModeHandler = () => {
     setLogin(!isLogin);
@@ -64,7 +67,15 @@ const Auth = () => {
       if (response.status !== 200 && response.status !== 201) {
         throw new Error("Failed");
       }
-      console.log(response.data);
+      console.log(response.data.data);
+
+      if (response.data.data.login.token) {
+        contextType.login(
+          response.data.data.login.token,
+          response.data.data.login.userId,
+          response.data.data.login.tokenExpiration
+        );
+      }
     } catch (error) {
       console.log(error);
     }
