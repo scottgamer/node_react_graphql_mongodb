@@ -52,15 +52,39 @@ Add API to project (REST or GraphQL)
 
 `amplify add api`
 
+Choose between GraphQL or REST
+
 Push changes to generate GraphQL API
 
 `amplify push`
+
+After all changes have been pushed to aws, the following files will be added to the project:
+
+- aws-exports.js - API key and credentials
+- in case of using typescript, there will be an API.ts file for type definitions
+- graphql folder with mutations, queries, subscriptions and the schema.json file
 
 #### Usage with React
 
 Install the following packages
 
 `npm install aws-amplify aws-amplify-react`
+
+Add the following code to the index.js file
+
+```javascript
+import Amplify from "@aws-amplify/core";
+import config from "./aws-exports";
+Amplify.configure(config);
+```
+
+Add the following code to every component that needs to interact with the API
+
+```javascript
+import { Connect } from "aws-amplify-react";
+import { graphqlOperation } from "aws-amplify";
+import { listBlogs } from "../graphql/queries"; // mutations/subscriptions
+```
 
 ### AppSync
 
