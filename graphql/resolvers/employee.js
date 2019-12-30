@@ -16,7 +16,27 @@ module.exports = {
     }
   },
   createEmployee: async (args, req) => {
-    const employee = new Employee({
+    const employeeData = {
+      firstname: args.employeeInput.firstname,
+      lastname: args.employeeInput.lastname
+    };
+
+    let employee;
+
+    // update
+    if (args.employeeInput._id) {
+      employee = await Employee.findOneAndUpdate(
+        { _id: args.employeeInput._id },
+        employeeData,
+        {
+          new: true,
+          upsert: true
+        }
+      );
+    }
+
+    // insert
+    employee = new Employee({
       firstname: args.employeeInput.firstname,
       lastname: args.employeeInput.lastname
     });
@@ -70,7 +90,7 @@ module.exports = {
     } catch (error) {
       throw error;
     }
-  },
+  }
   // updateEmployee: async (args, req) => {
   //   const employee = await Employee.findById(args.employeeId);
   //   if(){}

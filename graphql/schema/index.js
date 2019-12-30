@@ -23,7 +23,6 @@ type Skill {
   name: String!
 }
 
-
 type Booking {
   _id: ID!
   event: Event!
@@ -67,6 +66,7 @@ input UserInput {
 }
 
 input EmployeeInput {
+  _id: ID
   firstname: String!
   lastname: String!
   addresses: [AddressInput!]
