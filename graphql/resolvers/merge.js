@@ -1,6 +1,9 @@
 const Event = require("../../models/event");
 const User = require("../../models/user");
-const {dateToString} = require("../../helpers/date");
+const Address = require("../../models/address");
+const Skill = require("../../models/skill");
+
+const { dateToString } = require("../../helpers/date");
 
 const events = async eventIds => {
   try {
@@ -8,6 +11,30 @@ const events = async eventIds => {
 
     return events.map(event => {
       return transformEvent(event);
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+const addresses = async addressIds => {
+  try {
+    const addresses = await Address.find({ _id: { $in: addressIds } });
+
+    return addresses.map(address => {
+      return transformAddress(address);
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+const skills = async skillIds => {
+  try {
+    const skills = await Skill.find({ _id: { $in: skillIds } });
+
+    return skills.map(skill => {
+      return transformSkill(skill);
     });
   } catch (error) {
     throw error;
@@ -45,6 +72,18 @@ const transformEvent = event => {
   };
 };
 
+const transformAddress = address => {
+  return {
+    ...address._doc
+  };
+};
+
+const transformSkill = skill => {
+  return {
+    ...skill._doc
+  };
+};
+
 const transformBooking = booking => {
   return {
     ...booking._doc,
@@ -55,5 +94,16 @@ const transformBooking = booking => {
   };
 };
 
+const transformEmployee = employee => {
+  return {
+    ...employee._doc,
+    addresses: addresses.bind(this, employee._doc.addresses),
+    skills: skills.bind(this, employee._doc.skills),
+    createdAt: dateToString(employee._doc.createdAt),
+    updatedAt: dateToString(employee._doc.updatedAt)
+  };
+};
+
 exports.transformEvent = transformEvent;
 exports.transformBooking = transformBooking;
+exports.transformEmployee = transformEmployee;

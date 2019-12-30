@@ -1,6 +1,29 @@
 const { buildSchema } = require("graphql");
 
 module.exports = buildSchema(`
+type Employee {
+  _id: ID!
+  firstname: String!
+  lastname: String!
+  addresses: [Address!]
+  skills: [Skill!]
+}
+
+type Address {
+  _id: ID!
+  line1: String!
+  line2: String
+  city: String!
+  state: String!
+  zipcode: String!
+}
+
+type Skill {
+  _id: ID!
+  name: String!
+}
+
+
 type Booking {
   _id: ID!
   event: Event!
@@ -43,13 +66,38 @@ input UserInput {
   password: String!
 }
 
+input EmployeeInput {
+  firstname: String!
+  lastname: String!
+  addresses: [AddressInput!]
+  skills: [SkillInput!]
+}
+
+input AddressInput {
+  line1: String!
+  line2: String
+  city: String!
+  state: String!
+  zipcode: String!
+}
+
+input SkillInput {
+  name: String!
+}
+
 type RootQuery {
   events: [Event!]!
   bookings: [Booking!]!
   login(email: String!, password: String!): AuthData!
+  employees: [Employee!]!
 }
 
 type RootMutation {
+  createEmployee(employeeInput: EmployeeInput): Employee
+  updateEmployee(employeeId: ID!): Employee
+  deleteEmployee(employeeId: ID!): Employee
+  createAddress(addressInput: AddressInput): Address
+  createSkill(skillInput: SkillInput): Skill
   createEvent(eventInput: EventInput): Event
   createUser(userInput: UserInput): User
   bookEvent(eventId: ID!): Booking!
