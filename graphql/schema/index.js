@@ -66,11 +66,18 @@ input UserInput {
 }
 
 input EmployeeInput {
-  _id: ID
   firstname: String!
   lastname: String!
   addresses: [AddressInput!]
   skills: [SkillInput!]
+}
+
+input UpdateEmployeeInput {
+  _id: ID!
+  firstname: String
+  lastname: String
+  addresses: [UpdateAddressInput]
+  skills: [UpdateSkillInput]
 }
 
 input AddressInput {
@@ -81,8 +88,22 @@ input AddressInput {
   zipcode: String!
 }
 
+input UpdateAddressInput {
+  _id: ID!
+  line1: String
+  line2: String
+  city: String
+  state: String
+  zipcode: String
+}
+
 input SkillInput {
   name: String!
+}
+
+input UpdateSkillInput {
+  _id: ID!
+  name: String
 }
 
 type RootQuery {
@@ -94,7 +115,7 @@ type RootQuery {
 
 type RootMutation {
   createEmployee(employeeInput: EmployeeInput): Employee
-  updateEmployee(employeeId: ID!): Employee
+  updateEmployee(updateEmployeeInput: UpdateEmployeeInput): Employee
   deleteEmployee(employeeId: ID!): Employee
   createAddress(addressInput: AddressInput): Address
   createSkill(skillInput: SkillInput): Skill

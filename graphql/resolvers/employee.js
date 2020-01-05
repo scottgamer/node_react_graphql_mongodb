@@ -16,27 +16,7 @@ module.exports = {
     }
   },
   createEmployee: async (args, req) => {
-    const employeeData = {
-      firstname: args.employeeInput.firstname,
-      lastname: args.employeeInput.lastname
-    };
-
-    let employee;
-
-    // update
-    if (args.employeeInput._id) {
-      employee = await Employee.findOneAndUpdate(
-        { _id: args.employeeInput._id },
-        employeeData,
-        {
-          new: true,
-          upsert: true
-        }
-      );
-    }
-
-    // insert
-    employee = new Employee({
+    const employee = new Employee({
       firstname: args.employeeInput.firstname,
       lastname: args.employeeInput.lastname
     });
@@ -76,10 +56,10 @@ module.exports = {
         throw new Error("Employee not found");
       }
 
-      const addressId = employee.addresses[0];
+      const addressId = employee.addresses[0]._id;
       const address = await Address.findById(addressId);
 
-      const skillId = employee.skills[0];
+      const skillId = employee.skills[0]._id;
       const skill = await Skill.findById(skillId);
 
       await address.remove();
@@ -90,9 +70,51 @@ module.exports = {
     } catch (error) {
       throw error;
     }
+  },
+  updateEmployee: async (args, req) => {
+    try {
+      const updatedEmployee = {
+        ...args.updateEmployeeInput
+      };
+
+      const employee = await Employee.findByIdAndUpdate(
+        args.updateEmployeeInput._id,
+        updatedEmployee
+      );
+
+      // validate if address ids were sent
+      if (
+        typeof args.updateEmployeeInput.addresses != "undefined" &&
+        args.updateEmployeeInput.addresses.length > 0
+      ) {
+        const updatedAddress = {
+          ...args.updateEmployeeInput.addresses[0]
+        };
+
+        await Address.findByIdAndUpdate(
+          args.updateEmployeeInput.addresses[0]._id,
+          updatedAddress
+        );
+      }
+
+      // validate if skills ids were sent
+      if (
+        typeof args.updateEmployeeInput.skills != "undefined" &&
+        args.updateEmployeeInput.skills.length > 0
+      ) {
+        const updatedSkill = {
+          ...args.updateEmployeeInput.skills[0]
+        };
+
+        await Skill.findByIdAndUpdate(
+          args.updateEmployeeInput.skills[0]._id,
+          updatedSkill
+        );
+      }
+
+      return transformEmployee(employee);
+    } catch (error) {
+      throw error;
+    }
   }
-  // updateEmployee: async (args, req) => {
-  //   const employee = await Employee.findById(args.employeeId);
-  //   if(){}
-  // }
 };
